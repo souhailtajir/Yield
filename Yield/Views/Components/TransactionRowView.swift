@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-/// Single transaction row mimicking Apple Wallet style
+/// Transaction row matching Apple Card "Latest Card Transactions" style exactly
 struct TransactionRowView: View {
   let transaction: YieldTransaction
 
@@ -24,13 +24,13 @@ struct TransactionRowView: View {
   }
 
   private var formattedDate: String {
-    transaction.date.formatted(date: .abbreviated, time: .omitted)
+    transaction.date.formatted(.dateTime.month().day().year())
   }
 
   var body: some View {
-    HStack(spacing: 14) {
-      // Category icon in colored rounded rect (Apple style)
-      RoundedRectangle(cornerRadius: 8)
+    HStack(spacing: 12) {
+      // Category icon - 40x40 rounded rect
+      RoundedRectangle(cornerRadius: 10)
         .fill(transaction.category.color)
         .frame(width: 40, height: 40)
         .overlay {
@@ -39,34 +39,45 @@ struct TransactionRowView: View {
             .foregroundStyle(.white)
         }
 
-      // Title and date
+      // Title, category, date
       VStack(alignment: .leading, spacing: 2) {
         Text(transaction.title)
-          .font(.body)
+          .font(.subheadline)
           .fontWeight(.medium)
           .foregroundStyle(.primary)
 
-        Text(formattedDate)
+        Text(transaction.category.displayName)
           .font(.caption)
           .foregroundStyle(.secondary)
+
+        Text(formattedDate)
+          .font(.caption)
+          .foregroundStyle(.tertiary)
       }
 
       Spacer()
 
-      // Amount
-      Text(formattedAmount)
-        .font(.body)
-        .fontWeight(.medium)
-        .foregroundStyle(amountColor)
+      // Amount and cashback
+      VStack(alignment: .trailing, spacing: 2) {
+        Text(formattedAmount)
+          .font(.subheadline)
+          .fontWeight(.medium)
+          .foregroundStyle(amountColor)
+
+        if !transaction.isCredit {
+          Text("2%")
+            .font(.caption)
+            .foregroundStyle(.secondary)
+        }
+      }
 
       // Chevron
       Image(systemName: "chevron.right")
-        .font(.caption)
-        .fontWeight(.semibold)
-        .foregroundStyle(.tertiary)
+        .font(.caption2.weight(.semibold))
+        .foregroundStyle(.quaternary)
     }
-    .padding(.horizontal, 16)
-    .padding(.vertical, 12)
+    .padding(.horizontal, 14)
+    .padding(.vertical, 10)
     .contentShape(Rectangle())
   }
 }
@@ -75,26 +86,43 @@ struct TransactionRowView: View {
   VStack(spacing: 0) {
     TransactionRowView(
       transaction: YieldTransaction(
-        title: "Starbucks",
-        amount: 6.45,
-        category: .foodAndDrinks,
+        title: "CVS Pharmacy",
+        amount: 286.45,
+        category: .health,
         isCredit: false
       )
     )
 
     Divider()
-      .padding(.leading, 60)
+      .padding(.leading, 68)
 
     TransactionRowView(
       transaction: YieldTransaction(
-        title: "Paycheck",
-        amount: 3500.00,
+        title: "Lyft",
+        amount: 46.28,
+        category: .transportation,
+        isCredit: false
+      )
+    )
+
+    Divider()
+      .padding(.leading, 68)
+
+    TransactionRowView(
+      transaction: YieldTransaction(
+        title: "Payment",
+        amount: 311.37,
         category: .income,
-        isCredit: true
+        isCredit: true,
+        notes: "From Apple Cash"
       )
     )
   }
-  .background(Color(.systemBackground))
-  .clipShape(RoundedRectangle(cornerRadius: 12))
-  .padding()
+  .background {
+    RoundedRectangle(cornerRadius: 12)
+      .fill(.clear)
+      .glassEffect(.regular)
+  }
+  .padding(.horizontal, 20)
+  .background(Color(.systemGroupedBackground))
 }
