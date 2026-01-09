@@ -12,16 +12,15 @@ enum MockDataGenerator: Sendable {
 
   /// Sample transaction titles by category
   private static let transactionTitles: [TransactionCategory: [String]] = [
-    .groceries: ["Whole Foods", "Trader Joe's", "Safeway", "Costco"],
-    .transport: ["Uber", "Lyft", "Shell Gas", "Chevron"],
-    .entertainment: ["Netflix", "Spotify", "AMC Theaters", "Apple TV+"],
-    .dining: ["Chipotle", "Starbucks", "The Cheesecake Factory", "In-N-Out"],
-    .shopping: ["Amazon", "Target", "Best Buy", "Apple Store"],
-    .utilities: ["PG&E", "Comcast", "AT&T", "Water Bill"],
-    .health: ["CVS Pharmacy", "Gym Membership", "Doctor Visit", "Walgreens"],
+    .foodAndDrinks: ["Chipotle", "Starbucks", "Whole Foods", "Trader Joe's", "In-N-Out"],
+    .entertainment: ["Netflix", "Spotify", "AMC Theaters", "Apple TV+", "Nintendo"],
+    .shopping: ["Amazon", "Target", "Best Buy", "Apple Store", "Costco"],
     .travel: ["Delta Airlines", "Marriott Hotel", "Airbnb", "Hertz"],
+    .health: ["CVS Pharmacy", "Gym Membership", "Doctor Visit", "Walgreens"],
+    .transportation: ["Uber", "Lyft", "Shell Gas", "Chevron", "Metro"],
+    .services: ["PG&E", "Comcast", "AT&T", "Water Bill", "Internet"],
     .income: ["Paycheck", "Dividend", "Interest Payment", "Bonus"],
-    .investment: ["Stock Purchase", "ETF Investment", "Crypto Buy", "Bond Purchase"],
+    .savings: ["Savings Deposit", "Transfer to Savings", "Emergency Fund"],
     .other: ["Miscellaneous", "ATM Withdrawal", "Bank Fee", "Transfer"],
   ]
 
@@ -35,7 +34,7 @@ enum MockDataGenerator: Sendable {
       let titles = transactionTitles[category] ?? ["Unknown"]
       let title = titles.randomElement() ?? "Transaction"
 
-      let isCredit = category == .income || category == .investment
+      let isCredit = category == .income || category == .savings
       let amount =
         isCredit
         ? Double.random(in: 50...5000)

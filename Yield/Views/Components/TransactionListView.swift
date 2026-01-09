@@ -40,7 +40,7 @@ struct TransactionListView: View {
         Text("Latest Transactions")
           .font(.title3)
           .fontWeight(.bold)
-          .foregroundStyle(.white)
+          .foregroundStyle(.primary)
 
         Spacer()
 
@@ -62,13 +62,22 @@ struct TransactionListView: View {
           Text(sectionHeader(for: group.date))
             .font(.subheadline)
             .fontWeight(.semibold)
-            .foregroundStyle(.white.opacity(0.6))
+            .foregroundStyle(.secondary)
             .padding(.horizontal, 4)
 
           // Transaction rows
-          ForEach(group.transactions, id: \.id) { transaction in
-            TransactionRowView(transaction: transaction)
+          VStack(spacing: 0) {
+            ForEach(group.transactions, id: \.id) { transaction in
+              TransactionRowView(transaction: transaction)
+
+              if transaction.id != group.transactions.last?.id {
+                Divider()
+                  .padding(.leading, 60)
+              }
+            }
           }
+          .background(Color(.systemBackground))
+          .clipShape(RoundedRectangle(cornerRadius: 12))
         }
       }
     }
@@ -82,5 +91,5 @@ struct TransactionListView: View {
     )
     .padding()
   }
-  .walletBackground()
+  .background(Color(.systemGroupedBackground))
 }

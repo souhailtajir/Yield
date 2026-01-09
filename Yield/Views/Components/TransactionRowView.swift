@@ -16,7 +16,7 @@ struct TransactionRowView: View {
   }
 
   private var amountPrefix: String {
-    transaction.isCredit ? "+" : "-"
+    transaction.isCredit ? "+" : ""
   }
 
   private var formattedAmount: String {
@@ -29,19 +29,18 @@ struct TransactionRowView: View {
 
   var body: some View {
     HStack(spacing: 14) {
-      // Category icon
-      ZStack {
-        Circle()
-          .fill(transaction.category.color.opacity(0.15))
-          .frame(width: 44, height: 44)
-
-        Image(systemName: transaction.category.symbol)
-          .font(.system(size: 18, weight: .semibold))
-          .foregroundStyle(transaction.category.color)
-      }
+      // Category icon in colored rounded rect (Apple style)
+      RoundedRectangle(cornerRadius: 8)
+        .fill(transaction.category.color)
+        .frame(width: 40, height: 40)
+        .overlay {
+          Image(systemName: transaction.category.symbol)
+            .font(.system(size: 16, weight: .semibold))
+            .foregroundStyle(.white)
+        }
 
       // Title and date
-      VStack(alignment: .leading, spacing: 3) {
+      VStack(alignment: .leading, spacing: 2) {
         Text(transaction.title)
           .font(.body)
           .fontWeight(.medium)
@@ -57,29 +56,34 @@ struct TransactionRowView: View {
       // Amount
       Text(formattedAmount)
         .font(.body)
-        .fontWeight(.semibold)
+        .fontWeight(.medium)
         .foregroundStyle(amountColor)
+
+      // Chevron
+      Image(systemName: "chevron.right")
+        .font(.caption)
+        .fontWeight(.semibold)
+        .foregroundStyle(.tertiary)
     }
-    .padding(.vertical, 10)
     .padding(.horizontal, 16)
-    .background {
-      RoundedRectangle(cornerRadius: 14)
-        .fill(.ultraThinMaterial)
-    }
-    .glassEffect(.clear)
+    .padding(.vertical, 12)
+    .contentShape(Rectangle())
   }
 }
 
 #Preview {
-  VStack(spacing: 8) {
+  VStack(spacing: 0) {
     TransactionRowView(
       transaction: YieldTransaction(
         title: "Starbucks",
         amount: 6.45,
-        category: .dining,
+        category: .foodAndDrinks,
         isCredit: false
       )
     )
+
+    Divider()
+      .padding(.leading, 60)
 
     TransactionRowView(
       transaction: YieldTransaction(
@@ -90,6 +94,7 @@ struct TransactionRowView: View {
       )
     )
   }
+  .background(Color(.systemBackground))
+  .clipShape(RoundedRectangle(cornerRadius: 12))
   .padding()
-  .walletBackground()
 }
