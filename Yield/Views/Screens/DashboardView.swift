@@ -8,53 +8,41 @@
 import SwiftData
 import SwiftUI
 
-/// Main dashboard screen with Apple Wallet-style design - stats focused
+/// Main dashboard - matches Apple Card proportions and spacing exactly
 struct DashboardView: View {
   @Environment(\.modelContext) private var modelContext
   @State private var viewModel = DashboardViewModel()
 
-  // Mock data for display
-  @State private var sparklineData: [Double] = []
-  @State private var weeklyActivity: [Double] = []
   @State private var categoryData: [CategorySpending] = []
-
-  // Sheet state
+  @State private var daySpending: [DaySpending] = []
   @State private var showAddTransaction = false
 
   var body: some View {
     NavigationStack {
       ScrollView {
-        VStack(spacing: 16) {
-          // Stats Overview Card - tappable to show spending detail
+        VStack(spacing: 12) {
+          // Main gradient card - credit card aspect ratio
           NavigationLink {
             SpendingDetailView()
           } label: {
-            StatsOverviewCard(
-              totalBalance: viewModel.totalBalance,
-              monthlyChange: viewModel.todayEarnings * 30,
-              sparklineData: sparklineData
-            )
+            AppleCardView(categoryBreakdown: categoryData)
           }
           .buttonStyle(.plain)
 
-          // Quick Stats Row (Savings / Spending)
-          QuickStatsRow(
-            leftTitle: "Monthly Savings",
-            leftValue: viewModel.todayEarnings.formatted(.currency(code: "USD")),
-            leftSubtitle: "APY: \(viewModel.formattedYield)",
-            rightTitle: "This Month",
-            rightValue: (viewModel.todayEarnings * 30).formatted(.currency(code: "USD")),
-            rightSubtitle: nil
+          // Remaining balance card
+          RemainingBalanceCard(
+            remaining: max(0, viewModel.totalBalance - calculateMonthlyExpenses()),
+            total: viewModel.totalBalance
           )
 
           // Weekly Activity
-          WeeklyActivitySection(
-            weeklyTotal: viewModel.todayEarnings * 7,
-            dailyAmounts: weeklyActivity
+          WeeklyActivityCard(
+            dailyCashAmount: viewModel.todayEarnings * 7,
+            daySpending: daySpending
           )
 
-          // Savings Account Row
-          savingsAccountRow
+          // Savings Account
+          SavingsAccountRow(balance: viewModel.formattedBalance)
 
           // Latest Transactions
           if !viewModel.transactions.isEmpty {
@@ -81,14 +69,14 @@ struct DashboardView: View {
         ToolbarItem(placement: .topBarTrailing) {
           HStack(spacing: 16) {
             Button {
-              // Search action
+              // Search
             } label: {
               Image(systemName: "magnifyingglass")
                 .foregroundStyle(.primary)
             }
 
             Button {
-              // More options
+              // More
             } label: {
               Image(systemName: "ellipsis.circle")
                 .foregroundStyle(.primary)
@@ -103,12 +91,6 @@ struct DashboardView: View {
         await viewModel.loadData(modelContext: modelContext)
         loadMockData()
       }
-      .overlay {
-        if viewModel.isLoading {
-          ProgressView()
-            .scaleEffect(1.5)
-        }
-      }
     }
     .task {
       await viewModel.loadData(modelContext: modelContext)
@@ -116,60 +98,35 @@ struct DashboardView: View {
     }
   }
 
-  // MARK: - Subviews
+  // MARK: - Helpers
 
-  /// Savings account quick access row
-  private var savingsAccountRow: some View {
-    HStack(spacing: 12) {
-      // Icon
-      RoundedRectangle(cornerRadius: 8)
-        .fill(
-          LinearGradient(
-            colors: [.cyan, .blue],
-            startPoint: .topLeading,
-            endPoint: .bottomTrailing
-          )
-        )
-        .frame(width: 40, height: 40)
-        .overlay {
-          Image(systemName: "building.columns.fill")
-            .font(.system(size: 16, weight: .semibold))
-            .foregroundStyle(.white)
-        }
-
-      VStack(alignment: .leading, spacing: 2) {
-        Text("Savings Account")
-          .font(.subheadline)
-          .fontWeight(.medium)
-          .foregroundStyle(.primary)
-
-        Text("Current Balance: \(viewModel.formattedBalance)")
-          .font(.caption)
-          .foregroundStyle(.secondary)
-      }
-
-      Spacer()
-
-      Image(systemName: "chevron.right")
-        .font(.caption.weight(.semibold))
-        .foregroundStyle(.tertiary)
-    }
-    .padding(16)
-    .background(Color(.secondarySystemGroupedBackground))
-    .clipShape(RoundedRectangle(cornerRadius: 12))
+  private func calculateMonthlyExpenses() -> Double {
+    viewModel.transactions
+      .filter { !$0.isCredit }
+      .reduce(0) { $0 + $1.amount }
   }
 
-  /// Latest transactions section
+  // MARK: - Subviews
+
   private var transactionsSection: some View {
-    VStack(alignment: .leading, spacing: 12) {
+    VStack(alignment: .leading, spacing: 10) {
       HStack {
         Text("Latest Transactions")
-          .font(.title3)
-          .fontWeight(.bold)
+          .font(.subheadline)
+          .fontWeight(.semibold)
           .foregroundStyle(.primary)
 
         Spacer()
+
+        Button {
+          // Filter
+        } label: {
+          Image(systemName: "line.3.horizontal.decrease.circle")
+            .font(.body)
+            .foregroundStyle(.secondary)
+        }
       }
+      .padding(.horizontal, 4)
 
       VStack(spacing: 0) {
         ForEach(viewModel.transactions.prefix(5), id: \.id) { transaction in
@@ -177,26 +134,44 @@ struct DashboardView: View {
 
           if transaction.id != viewModel.transactions.prefix(5).last?.id {
             Divider()
-              .padding(.leading, 60)
+              .padding(.leading, 68)
           }
         }
       }
-      .background(Color(.secondarySystemGroupedBackground))
-      .clipShape(RoundedRectangle(cornerRadius: 12))
+      .background {
+        RoundedRectangle(cornerRadius: 12)
+          .fill(.clear)
+          .glassEffect(.regular)
+      }
     }
   }
 
-  // MARK: - Data Loading
+  // MARK: - Data
 
   private func loadMockData() {
-    // Generate sparkline data
-    sparklineData = (0..<14).map { _ in Double.random(in: 100...200) }
-
-    // Generate weekly activity
-    weeklyActivity = (0..<7).map { _ in Double.random(in: 20...150) }
-
-    // Generate category data
     categoryData = CategorySpending.generateMockData()
+
+    let categories: [TransactionCategory] = [
+      .foodAndDrinks, .entertainment, .shopping, .transportation, .services,
+    ]
+
+    daySpending = (0..<7).map { index in
+      let total = Double.random(in: 20...150)
+      var remaining = total
+      var amounts: [(category: TransactionCategory, amount: Double)] = []
+
+      for (i, category) in categories.enumerated() {
+        if i == categories.count - 1 {
+          amounts.append((category, remaining))
+        } else {
+          let portion = Double.random(in: 0...(remaining * 0.6))
+          amounts.append((category, portion))
+          remaining -= portion
+        }
+      }
+
+      return DaySpending(dayIndex: index, categoryAmounts: amounts.filter { $0.amount > 0 })
+    }
   }
 }
 

@@ -1,0 +1,210 @@
+//
+//  AppleCardView.swift
+//  Yield
+//
+//  Created on 1/10/26.
+//
+
+import SwiftUI
+
+/// Clean MeshGradient card matching Apple Card proportions
+/// Card aspect ratio: ~1.58:1 (standard credit card ratio)
+struct AppleCardView: View {
+  let categoryBreakdown: [CategorySpending]
+
+  private var meshColors: [Color] {
+    let defaultColors: [Color] = [
+      Color(red: 0.75, green: 0.65, blue: 0.95),
+      Color(red: 0.85, green: 0.75, blue: 0.98),
+      Color(red: 0.70, green: 0.78, blue: 0.98),
+      Color(red: 0.88, green: 0.72, blue: 0.92),
+      Color(red: 0.80, green: 0.70, blue: 0.95),
+      Color(red: 0.65, green: 0.72, blue: 0.95),
+      Color(red: 0.90, green: 0.68, blue: 0.88),
+      Color(red: 0.78, green: 0.65, blue: 0.92),
+      Color(red: 0.72, green: 0.75, blue: 0.95),
+    ]
+
+    guard !categoryBreakdown.isEmpty else { return defaultColors }
+
+    var colors = defaultColors
+    let sorted = categoryBreakdown.sorted { $0.amount > $1.amount }
+
+    for (index, spending) in sorted.prefix(3).enumerated() {
+      let baseColor = spending.category.color
+      colors[index * 3] = baseColor.opacity(0.8)
+      colors[index * 3 + 1] = baseColor.opacity(0.6)
+    }
+
+    return colors
+  }
+
+  var body: some View {
+    ZStack {
+      MeshGradient(
+        width: 3,
+        height: 3,
+        points: [
+          [0.0, 0.0], [0.5, 0.0], [1.0, 0.0],
+          [0.0, 0.5], [0.5, 0.5], [1.0, 0.5],
+          [0.0, 1.0], [0.5, 1.0], [1.0, 1.0],
+        ],
+        colors: meshColors
+      )
+
+      RoundedRectangle(cornerRadius: 16)
+        .fill(.clear)
+        .glassEffect(.clear)
+    }
+    .aspectRatio(1.58, contentMode: .fit)  // Credit card ratio
+    .clipShape(RoundedRectangle(cornerRadius: 16))
+  }
+}
+
+/// Remaining balance card - matches Apple Card "Card Balance" style
+struct RemainingBalanceCard: View {
+  let remaining: Double
+  let total: Double
+
+  var body: some View {
+    VStack(alignment: .leading, spacing: 4) {
+      Text("Remaining")
+        .font(.caption)
+        .foregroundStyle(.secondary)
+
+      Text(remaining.formatted(.currency(code: "USD")))
+        .font(.system(size: 28, weight: .bold, design: .rounded))
+        .foregroundStyle(.primary)
+
+      Text("of \(total.formatted(.currency(code: "USD")))")
+        .font(.caption)
+        .foregroundStyle(.secondary)
+    }
+    .frame(maxWidth: .infinity, alignment: .leading)
+    .padding(14)
+    .background {
+      RoundedRectangle(cornerRadius: 12)
+        .fill(.clear)
+        .glassEffect(.regular)
+    }
+  }
+}
+
+/// Weekly activity card - matches Apple Card "Monthly Activity" proportions
+struct WeeklyActivityCard: View {
+  let dailyCashAmount: Double
+  let daySpending: [DaySpending]
+
+  private var maxTotal: Double {
+    daySpending.map(\.total).max() ?? 1
+  }
+
+  var body: some View {
+    HStack {
+      VStack(alignment: .leading, spacing: 4) {
+        Text("Weekly Activity")
+          .font(.subheadline)
+          .fontWeight(.medium)
+          .foregroundStyle(.primary)
+
+        Text("+\(dailyCashAmount.formatted(.currency(code: "USD"))) Daily Cash")
+          .font(.caption)
+          .foregroundStyle(.green)
+      }
+
+      Spacer()
+
+      // Stacked bars - 7 days
+      HStack(alignment: .bottom, spacing: 3) {
+        ForEach(daySpending.prefix(7)) { day in
+          StackedBar(
+            categoryAmounts: day.categoryAmounts,
+            maxTotal: maxTotal,
+            maxHeight: 36
+          )
+        }
+      }
+    }
+    .padding(14)
+    .background {
+      RoundedRectangle(cornerRadius: 12)
+        .fill(.clear)
+        .glassEffect(.regular)
+    }
+  }
+}
+
+/// Savings account row - matches Apple Card style exactly
+struct SavingsAccountRow: View {
+  let balance: String
+
+  var body: some View {
+    HStack(spacing: 12) {
+      RoundedRectangle(cornerRadius: 10)
+        .fill(
+          LinearGradient(
+            colors: [.cyan, .blue],
+            startPoint: .topLeading,
+            endPoint: .bottomTrailing
+          )
+        )
+        .frame(width: 40, height: 40)
+        .overlay {
+          Image(systemName: "building.columns.fill")
+            .font(.system(size: 16, weight: .semibold))
+            .foregroundStyle(.white)
+        }
+
+      VStack(alignment: .leading, spacing: 2) {
+        Text("Savings Account")
+          .font(.subheadline)
+          .fontWeight(.medium)
+          .foregroundStyle(.primary)
+
+        Text("Current Balance: \(balance)")
+          .font(.caption)
+          .foregroundStyle(.secondary)
+      }
+
+      Spacer()
+
+      Image(systemName: "chevron.right")
+        .font(.caption.weight(.semibold))
+        .foregroundStyle(.quaternary)
+    }
+    .padding(14)
+    .background {
+      RoundedRectangle(cornerRadius: 12)
+        .fill(.clear)
+        .glassEffect(.regular)
+    }
+  }
+}
+
+#Preview {
+  ScrollView {
+    VStack(spacing: 12) {
+      AppleCardView(categoryBreakdown: CategorySpending.generateMockData())
+
+      RemainingBalanceCard(remaining: 3500, total: 5000)
+
+      WeeklyActivityCard(
+        dailyCashAmount: 21.77,
+        daySpending: (0..<7).map { index in
+          DaySpending(
+            dayIndex: index,
+            categoryAmounts: [
+              (.foodAndDrinks, Double.random(in: 10...50)),
+              (.entertainment, Double.random(in: 5...30)),
+              (.shopping, Double.random(in: 20...80)),
+            ]
+          )
+        }
+      )
+
+      SavingsAccountRow(balance: "$10,300.00")
+    }
+    .padding(.horizontal, 20)
+  }
+  .background(Color(.systemGroupedBackground))
+}

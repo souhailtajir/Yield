@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-/// Transaction list mimicking Apple Wallet's "Latest Transactions" section
+/// Transaction list mimicking Apple Card's "Latest Card Transactions" section
 struct TransactionListView: View {
   let transactions: [YieldTransaction]
 
@@ -35,9 +35,9 @@ struct TransactionListView: View {
 
   var body: some View {
     LazyVStack(alignment: .leading, spacing: 16) {
-      // Header
+      // Header with filter button
       HStack {
-        Text("Latest Transactions")
+        Text("Latest Card Transactions")
           .font(.title3)
           .fontWeight(.bold)
           .foregroundStyle(.primary)
@@ -45,38 +45,30 @@ struct TransactionListView: View {
         Spacer()
 
         Button {
-          // View all action
+          // Filter action
         } label: {
-          Text("See All")
-            .font(.subheadline)
-            .fontWeight(.medium)
-            .foregroundStyle(.blue)
+          Image(systemName: "line.3.horizontal.decrease.circle")
+            .font(.title3)
+            .foregroundStyle(.secondary)
         }
       }
       .padding(.horizontal, 4)
 
       // Grouped transactions
       ForEach(groupedTransactions, id: \.date) { group in
-        VStack(alignment: .leading, spacing: 8) {
-          // Date section header
-          Text(sectionHeader(for: group.date))
-            .font(.subheadline)
-            .fontWeight(.semibold)
-            .foregroundStyle(.secondary)
-            .padding(.horizontal, 4)
-
-          // Transaction rows
+        VStack(alignment: .leading, spacing: 0) {
+          // Transaction rows in card container
           VStack(spacing: 0) {
             ForEach(group.transactions, id: \.id) { transaction in
               TransactionRowView(transaction: transaction)
 
               if transaction.id != group.transactions.last?.id {
                 Divider()
-                  .padding(.leading, 60)
+                  .padding(.leading, 72)
               }
             }
           }
-          .background(Color(.systemBackground))
+          .background(Color(.secondarySystemGroupedBackground))
           .clipShape(RoundedRectangle(cornerRadius: 12))
         }
       }
