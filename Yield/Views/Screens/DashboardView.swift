@@ -113,7 +113,7 @@ struct DashboardView: View {
     VStack(alignment: .leading, spacing: 10) {
       HStack {
         Text("Latest Transactions")
-          .font(.subheadline)
+          .font(.headline)
           .fontWeight(.semibold)
           .foregroundStyle(.primary)
 
