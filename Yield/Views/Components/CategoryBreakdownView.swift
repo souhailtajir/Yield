@@ -116,38 +116,32 @@ extension CategorySpending {
     [
       CategorySpending(
         category: .shopping,
-        amount: 1063.56,
-        transactionCount: 9,
-        changeAmount: 510.35
-      ),
-      CategorySpending(
-        category: .services,
-        amount: 277.92,
-        transactionCount: 3,
-        changeAmount: 113.17
+        amount: 500.00,
+        transactionCount: 5,
+        changeAmount: 50.00
       ),
       CategorySpending(
         category: .foodAndDrinks,
-        amount: 190.14,
-        transactionCount: 13,
-        changeAmount: 91.36
+        amount: 300.00,
+        transactionCount: 8,
+        changeAmount: 25.00
+      ),
+      CategorySpending(
+        category: .services,
+        amount: 150.00,
+        transactionCount: 2,
+        changeAmount: -10.00
       ),
       CategorySpending(
         category: .transportation,
-        amount: 86.50,
-        transactionCount: 12,
-        changeAmount: -88.06
+        amount: 75.00,
+        transactionCount: 4,
+        changeAmount: 5.00
       ),
       CategorySpending(
         category: .entertainment,
-        amount: 34.94,
-        transactionCount: 3,
-        changeAmount: 9.00
-      ),
-      CategorySpending(
-        category: .other,
-        amount: 26.38,
-        transactionCount: 1,
+        amount: 50.00,
+        transactionCount: 2,
         changeAmount: 0
       ),
     ]

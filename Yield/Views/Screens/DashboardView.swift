@@ -28,6 +28,7 @@ struct DashboardView: View {
             AppleCardView(categoryBreakdown: categoryData)
           }
           .buttonStyle(.plain)
+          .padding(.bottom, 8)  // Extra space for card glow
 
           // Remaining balance card
           RemainingBalanceCard(
@@ -151,26 +152,23 @@ struct DashboardView: View {
   private func loadMockData() {
     categoryData = CategorySpending.generateMockData()
 
-    let categories: [TransactionCategory] = [
-      .foodAndDrinks, .entertainment, .shopping, .transportation, .services,
+    // Use the top 3 categories from the card for consistent colors
+    let topCategories = categoryData.prefix(3).map { $0.category }
+    let defaultCategories: [TransactionCategory] = [
+      .shopping, .services, .foodAndDrinks,
     ]
+    let categories = topCategories.isEmpty ? defaultCategories : Array(topCategories)
 
-    daySpending = (0..<7).map { index in
-      let total = Double.random(in: 20...150)
-      var remaining = total
-      var amounts: [(category: TransactionCategory, amount: Double)] = []
+    // Simple test data with fixed values
+    let dailyTotals = [45.0, 80.0, 35.0, 120.0, 55.0, 70.0, 90.0]
 
-      for (i, category) in categories.enumerated() {
-        if i == categories.count - 1 {
-          amounts.append((category, remaining))
-        } else {
-          let portion = Double.random(in: 0...(remaining * 0.6))
-          amounts.append((category, portion))
-          remaining -= portion
-        }
+    daySpending = dailyTotals.enumerated().map { index, total in
+      // Distribute evenly among categories for simple testing
+      let perCategory = total / Double(categories.count)
+      let amounts = categories.map { category in
+        (category: category, amount: perCategory)
       }
-
-      return DaySpending(dayIndex: index, categoryAmounts: amounts.filter { $0.amount > 0 })
+      return DaySpending(dayIndex: index, categoryAmounts: amounts)
     }
   }
 }

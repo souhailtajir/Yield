@@ -30,26 +30,26 @@ enum TransactionCategory: String, Codable, CaseIterable, Sendable {
     case .travel: "airplane"
     case .health: "heart.fill"
     case .transportation: "car.fill"
-    case .services: "wrench.and.screwdriver.fill"
+    case .services: "storefront.fill"  // Store icon like Apple Card
     case .income: "arrow.down.circle.fill"
-    case .savings: "banknote.fill"
-    case .other: "ellipsis.circle.fill"
+    case .savings: "building.columns.fill"
+    case .other: "building.2.fill"  // Building icon like Apple Card
     }
   }
 
-  /// Category display color - exact Apple Card colors
+  /// Category display color - exact Apple Card colors from screenshot
   var color: Color {
     switch self {
-    case .foodAndDrinks: Color(red: 1.0, green: 0.58, blue: 0.0)  // Orange #FF9500
-    case .entertainment: Color(red: 1.0, green: 0.18, blue: 0.33)  // Pink #FF2D55
-    case .shopping: Color(red: 1.0, green: 0.80, blue: 0.0)  // Yellow/Gold #FFCC00
-    case .travel: Color(red: 0.0, green: 0.48, blue: 1.0)  // Blue #007AFF
-    case .health: Color(red: 1.0, green: 0.23, blue: 0.19)  // Red #FF3B30
-    case .transportation: Color(red: 0.35, green: 0.78, blue: 0.98)  // Teal #5AC8FA
-    case .services: Color(red: 1.0, green: 0.58, blue: 0.0)  // Orange #FF9500
-    case .income: Color.green
-    case .savings: Color.mint
-    case .other: Color(red: 0.56, green: 0.56, blue: 0.58)  // Gray #8E8E93
+    case .foodAndDrinks: Color(red: 0.98, green: 0.60, blue: 0.20)  // Orange
+    case .entertainment: Color(red: 0.95, green: 0.55, blue: 0.55)  // Coral/Pink
+    case .shopping: Color(red: 0.95, green: 0.78, blue: 0.25)  // Golden Yellow
+    case .travel: Color(red: 0.20, green: 0.60, blue: 0.98)  // Blue
+    case .health: Color(red: 0.98, green: 0.35, blue: 0.35)  // Red
+    case .transportation: Color(red: 0.40, green: 0.65, blue: 0.90)  // Light Blue
+    case .services: Color(red: 0.68, green: 0.55, blue: 0.85)  // Purple
+    case .income: Color(red: 0.30, green: 0.78, blue: 0.40)  // Green
+    case .savings: Color(red: 0.40, green: 0.75, blue: 0.85)  // Teal
+    case .other: Color(red: 0.60, green: 0.60, blue: 0.65)  // Gray
     }
   }
 

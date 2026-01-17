@@ -255,26 +255,18 @@ struct WeeklyActivitySection: View {
 
   /// Generate stacked spending data from daily amounts
   private var daySpending: [DaySpending] {
+    // Use same categories as the card for consistent colors
     let categories: [TransactionCategory] = [
-      .foodAndDrinks, .entertainment, .shopping, .transportation, .services,
+      .shopping, .foodAndDrinks, .services,
     ]
 
     return dailyAmounts.prefix(7).enumerated().map { index, total in
-      // Distribute total among random categories
-      var remaining = total
-      var amounts: [(category: TransactionCategory, amount: Double)] = []
-
-      for (i, category) in categories.enumerated() {
-        if i == categories.count - 1 {
-          amounts.append((category, remaining))
-        } else {
-          let portion = Double.random(in: 0...(remaining * 0.6))
-          amounts.append((category, portion))
-          remaining -= portion
-        }
+      // Distribute evenly among categories for consistent display
+      let perCategory = total / Double(categories.count)
+      let amounts = categories.map { category in
+        (category: category, amount: perCategory)
       }
-
-      return DaySpending(dayIndex: index, categoryAmounts: amounts.filter { $0.amount > 0 })
+      return DaySpending(dayIndex: index, categoryAmounts: amounts)
     }
   }
 
