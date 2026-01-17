@@ -113,7 +113,7 @@ struct DashboardView: View {
     VStack(alignment: .leading, spacing: 10) {
       HStack {
         Text("Latest Transactions")
-          .font(.subheadline)
+          .font(.headline)
           .fontWeight(.semibold)
           .foregroundStyle(.primary)
 
@@ -131,7 +131,12 @@ struct DashboardView: View {
 
       VStack(spacing: 0) {
         ForEach(viewModel.transactions.prefix(5), id: \.id) { transaction in
-          TransactionRowView(transaction: transaction)
+          NavigationLink {
+            TransactionDetailView(transaction: transaction)
+          } label: {
+            TransactionRowView(transaction: transaction)
+          }
+          .buttonStyle(.plain)
 
           if transaction.id != viewModel.transactions.prefix(5).last?.id {
             Divider()
@@ -139,11 +144,7 @@ struct DashboardView: View {
           }
         }
       }
-      .background {
-        RoundedRectangle(cornerRadius: 12)
-          .fill(.clear)
-          .glassEffect(.regular)
-      }
+      .glassEffect(.regular, in: .rect(cornerRadius: 12))
     }
   }
 
