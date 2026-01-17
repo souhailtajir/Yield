@@ -118,11 +118,8 @@ struct TransactionRowView: View {
       )
     )
   }
-  .background {
-    RoundedRectangle(cornerRadius: 12)
-      .fill(.clear)
-      .glassEffect(.regular)
-  }
+  .background(Color(.secondarySystemGroupedBackground))
+  .clipShape(RoundedRectangle(cornerRadius: 12))
   .padding(.horizontal, 20)
   .background(Color(.systemGroupedBackground))
 }

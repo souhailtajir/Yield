@@ -13,16 +13,17 @@ struct AppleCardView: View {
   let categoryBreakdown: [CategorySpending]
 
   private var meshColors: [Color] {
+    // Vibrant default colors with more pop
     let defaultColors: [Color] = [
-      Color(red: 0.75, green: 0.65, blue: 0.95),
-      Color(red: 0.85, green: 0.75, blue: 0.98),
-      Color(red: 0.70, green: 0.78, blue: 0.98),
-      Color(red: 0.88, green: 0.72, blue: 0.92),
-      Color(red: 0.80, green: 0.70, blue: 0.95),
-      Color(red: 0.65, green: 0.72, blue: 0.95),
-      Color(red: 0.90, green: 0.68, blue: 0.88),
-      Color(red: 0.78, green: 0.65, blue: 0.92),
-      Color(red: 0.72, green: 0.75, blue: 0.95),
+      Color(red: 1.0, green: 0.6, blue: 0.2),  // Warm orange
+      Color(red: 1.0, green: 0.85, blue: 0.4),  // Golden yellow
+      Color(red: 0.95, green: 0.75, blue: 0.85),  // Soft pink
+      Color(red: 1.0, green: 0.5, blue: 0.3),  // Coral
+      Color(red: 1.0, green: 0.7, blue: 0.3),  // Amber
+      Color(red: 0.9, green: 0.85, blue: 0.95),  // Light lavender
+      Color(red: 1.0, green: 0.55, blue: 0.25),  // Deep orange
+      Color(red: 1.0, green: 0.8, blue: 0.5),  // Peach
+      Color(red: 0.85, green: 0.9, blue: 0.98),  // Ice blue
     ]
 
     guard !categoryBreakdown.isEmpty else { return defaultColors }
@@ -30,10 +31,11 @@ struct AppleCardView: View {
     var colors = defaultColors
     let sorted = categoryBreakdown.sorted { $0.amount > $1.amount }
 
+    // Use full saturation for more vibrant colors
     for (index, spending) in sorted.prefix(3).enumerated() {
       let baseColor = spending.category.color
-      colors[index * 3] = baseColor.opacity(0.8)
-      colors[index * 3 + 1] = baseColor.opacity(0.6)
+      colors[index * 3] = baseColor
+      colors[index * 3 + 1] = baseColor.opacity(0.85)
     }
 
     return colors
@@ -41,6 +43,7 @@ struct AppleCardView: View {
 
   var body: some View {
     ZStack {
+      // Base mesh gradient with vibrant colors
       MeshGradient(
         width: 3,
         height: 3,
@@ -52,12 +55,13 @@ struct AppleCardView: View {
         colors: meshColors
       )
 
+      // Frosty matte overlay for premium look
       RoundedRectangle(cornerRadius: 16)
-        .fill(.clear)
-        .glassEffect(.clear)
+        .fill(.ultraThinMaterial)
+        .opacity(0.25)
     }
-    .aspectRatio(1.58, contentMode: .fit)  // Credit card ratio
     .clipShape(RoundedRectangle(cornerRadius: 16))
+    .aspectRatio(1.58, contentMode: .fit)  // Credit card ratio
   }
 }
 
@@ -189,14 +193,15 @@ struct SavingsAccountRow: View {
       RemainingBalanceCard(remaining: 3500, total: 5000)
 
       WeeklyActivityCard(
-        dailyCashAmount: 21.77,
-        daySpending: (0..<7).map { index in
-          DaySpending(
+        dailyCashAmount: 15.00,
+        daySpending: [45.0, 80.0, 35.0, 120.0, 55.0, 70.0, 90.0].enumerated().map { index, total in
+          let perCategory = total / 3.0
+          return DaySpending(
             dayIndex: index,
             categoryAmounts: [
-              (.foodAndDrinks, Double.random(in: 10...50)),
-              (.entertainment, Double.random(in: 5...30)),
-              (.shopping, Double.random(in: 20...80)),
+              (.shopping, perCategory),
+              (.foodAndDrinks, perCategory),
+              (.services, perCategory),
             ]
           )
         }
