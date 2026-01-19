@@ -86,6 +86,9 @@ struct SpendingDetailView: View {
     .onAppear {
       loadData()
     }
+    .onChange(of: selectedPeriod) { _, _ in
+      loadData()
+    }
   }
 
   // MARK: - Subviews
@@ -170,7 +173,16 @@ struct SpendingDetailView: View {
       // Category list with glass effect
       VStack(spacing: 0) {
         ForEach(categoryData) { category in
-          CategoryListRow(spending: category)
+          NavigationLink {
+            CategoryDetailView(
+              category: category.category,
+              totalAmount: category.amount,
+              transactionCount: category.transactionCount
+            )
+          } label: {
+            CategoryListRow(spending: category)
+          }
+          .buttonStyle(.plain)
 
           if category.id != categoryData.last?.id {
             Divider()
