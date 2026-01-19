@@ -68,7 +68,8 @@ struct DashboardView: View {
         }
 
         ToolbarItem(placement: .topBarTrailing) {
-          HStack(spacing: 16) {
+          
+            HStack(spacing: 16) {
             Button {
               // Search
             } label: {

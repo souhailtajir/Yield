@@ -10,7 +10,6 @@ import SwiftUI
 
 /// Transaction detail view matching Apple Card style
 struct TransactionDetailView: View {
-  @Environment(\.dismiss) private var dismiss
   @Bindable var transaction: YieldTransaction
 
   var body: some View {
@@ -29,18 +28,6 @@ struct TransactionDetailView: View {
       .padding(.top, 40)
     }
     .background(Color(.systemGroupedBackground))
-    .navigationBarBackButtonHidden(true)
-    .toolbar {
-      ToolbarItem(placement: .topBarLeading) {
-        Button {
-          dismiss()
-        } label: {
-          Image(systemName: "chevron.left")
-            .font(.body.weight(.semibold))
-            .foregroundStyle(.primary)
-        }
-      }
-    }
   }
 
   // MARK: - Amount Header

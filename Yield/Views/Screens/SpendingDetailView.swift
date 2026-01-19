@@ -23,7 +23,6 @@ enum SpendingBreakdownType: String, CaseIterable {
 
 /// Detailed spending view matching Apple Card UI exactly
 struct SpendingDetailView: View {
-  @Environment(\.dismiss) private var dismiss
   @State private var selectedPeriod: SpendingPeriod = .month
   @State private var selectedBreakdown: SpendingBreakdownType = .category
 
@@ -50,41 +49,28 @@ struct SpendingDetailView: View {
 
   var body: some View {
     ScrollView {
-      VStack(alignment: .leading, spacing: 20) {
+      VStack(alignment: .leading, spacing: 12) {
         // Month Title
         Text(periodTitle)
           .font(.largeTitle)
           .fontWeight(.bold)
-          .padding(.horizontal)
 
         // Spending Summary Section
         spendingSummarySection
-          .padding(.horizontal)
 
         // Category/Merchant Segmented Picker
         breakdownPicker
-          .padding(.horizontal)
-          .padding(.top, 8)
+          .padding(.top, 4)
 
         // Category Breakdown List
-        categoryList
+        categoryListSection
       }
+      .padding(.horizontal, 20)
       .padding(.top, 8)
       .padding(.bottom, 40)
     }
     .background(Color(.systemGroupedBackground))
-    .navigationBarBackButtonHidden(true)
     .toolbar {
-      ToolbarItem(placement: .topBarLeading) {
-        Button {
-          dismiss()
-        } label: {
-          Image(systemName: "chevron.left")
-            .font(.body.weight(.semibold))
-            .foregroundStyle(.primary)
-        }
-      }
-
       ToolbarItem(placement: .principal) {
         Picker("Period", selection: $selectedPeriod) {
           ForEach(SpendingPeriod.allCases, id: \.self) { period in
@@ -98,6 +84,9 @@ struct SpendingDetailView: View {
     }
     .toolbarTitleDisplayMode(.inline)
     .onAppear {
+      loadData()
+    }
+    .onChange(of: selectedPeriod) { _, _ in
       loadData()
     }
   }
@@ -146,8 +135,7 @@ struct SpendingDetailView: View {
         .padding(.top, 8)
     }
     .padding(20)
-    .background(Color(.secondarySystemGroupedBackground))
-    .clipShape(RoundedRectangle(cornerRadius: 16))
+    .glassEffect(.regular, in: .rect(cornerRadius: 16))
   }
 
   /// Comparison message text
@@ -160,21 +148,50 @@ struct SpendingDetailView: View {
     }
   }
 
-  /// Category breakdown list
-  private var categoryList: some View {
-    VStack(spacing: 0) {
-      ForEach(categoryData) { category in
-        CategoryListRow(spending: category)
+  /// Category breakdown list with section header matching DashboardView style
+  private var categoryListSection: some View {
+    VStack(alignment: .leading, spacing: 10) {
+      // Section header matching Dashboard's "Latest Transactions" style
+      HStack {
+        Text(selectedBreakdown == .category ? "Spending by Category" : "Spending by Merchant")
+          .font(.headline)
+          .fontWeight(.semibold)
+          .foregroundStyle(.primary)
 
-        if category.id != categoryData.last?.id {
-          Divider()
-            .padding(.leading, 72)
+        Spacer()
+
+        Button {
+          // Filter action
+        } label: {
+          Image(systemName: "line.3.horizontal.decrease.circle")
+            .font(.body)
+            .foregroundStyle(.secondary)
         }
       }
+      .padding(.horizontal, 4)
+
+      // Category list with glass effect
+      VStack(spacing: 0) {
+        ForEach(categoryData) { category in
+          NavigationLink {
+            CategoryDetailView(
+              category: category.category,
+              totalAmount: category.amount,
+              transactionCount: category.transactionCount
+            )
+          } label: {
+            CategoryListRow(spending: category)
+          }
+          .buttonStyle(.plain)
+
+          if category.id != categoryData.last?.id {
+            Divider()
+              .padding(.leading, 72)
+          }
+        }
+      }
+      .glassEffect(.regular, in: .rect(cornerRadius: 12))
     }
-    .background(Color(.secondarySystemGroupedBackground))
-    .clipShape(RoundedRectangle(cornerRadius: 12))
-    .padding(.horizontal)
   }
 
   // MARK: - Data
