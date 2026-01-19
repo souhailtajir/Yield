@@ -49,25 +49,23 @@ struct SpendingDetailView: View {
 
   var body: some View {
     ScrollView {
-      VStack(alignment: .leading, spacing: 20) {
+      VStack(alignment: .leading, spacing: 12) {
         // Month Title
         Text(periodTitle)
           .font(.largeTitle)
           .fontWeight(.bold)
-          .padding(.horizontal)
 
         // Spending Summary Section
         spendingSummarySection
-          .padding(.horizontal)
 
         // Category/Merchant Segmented Picker
         breakdownPicker
-          .padding(.horizontal)
-          .padding(.top, 8)
+          .padding(.top, 4)
 
         // Category Breakdown List
-        categoryList
+        categoryListSection
       }
+      .padding(.horizontal, 20)
       .padding(.top, 8)
       .padding(.bottom, 40)
     }
@@ -134,8 +132,7 @@ struct SpendingDetailView: View {
         .padding(.top, 8)
     }
     .padding(20)
-    .background(Color(.secondarySystemGroupedBackground))
-    .clipShape(RoundedRectangle(cornerRadius: 16))
+    .glassEffect(.regular, in: .rect(cornerRadius: 16))
   }
 
   /// Comparison message text
@@ -148,21 +145,41 @@ struct SpendingDetailView: View {
     }
   }
 
-  /// Category breakdown list
-  private var categoryList: some View {
-    VStack(spacing: 0) {
-      ForEach(categoryData) { category in
-        CategoryListRow(spending: category)
+  /// Category breakdown list with section header matching DashboardView style
+  private var categoryListSection: some View {
+    VStack(alignment: .leading, spacing: 10) {
+      // Section header matching Dashboard's "Latest Transactions" style
+      HStack {
+        Text(selectedBreakdown == .category ? "Spending by Category" : "Spending by Merchant")
+          .font(.headline)
+          .fontWeight(.semibold)
+          .foregroundStyle(.primary)
 
-        if category.id != categoryData.last?.id {
-          Divider()
-            .padding(.leading, 72)
+        Spacer()
+
+        Button {
+          // Filter action
+        } label: {
+          Image(systemName: "line.3.horizontal.decrease.circle")
+            .font(.body)
+            .foregroundStyle(.secondary)
         }
       }
+      .padding(.horizontal, 4)
+
+      // Category list with glass effect
+      VStack(spacing: 0) {
+        ForEach(categoryData) { category in
+          CategoryListRow(spending: category)
+
+          if category.id != categoryData.last?.id {
+            Divider()
+              .padding(.leading, 72)
+          }
+        }
+      }
+      .glassEffect(.regular, in: .rect(cornerRadius: 12))
     }
-    .background(Color(.secondarySystemGroupedBackground))
-    .clipShape(RoundedRectangle(cornerRadius: 12))
-    .padding(.horizontal)
   }
 
   // MARK: - Data
