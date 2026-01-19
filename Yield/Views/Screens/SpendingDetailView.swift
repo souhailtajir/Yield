@@ -23,7 +23,6 @@ enum SpendingBreakdownType: String, CaseIterable {
 
 /// Detailed spending view matching Apple Card UI exactly
 struct SpendingDetailView: View {
-  @Environment(\.dismiss) private var dismiss
   @State private var selectedPeriod: SpendingPeriod = .month
   @State private var selectedBreakdown: SpendingBreakdownType = .category
 
@@ -73,18 +72,7 @@ struct SpendingDetailView: View {
       .padding(.bottom, 40)
     }
     .background(Color(.systemGroupedBackground))
-    .navigationBarBackButtonHidden(true)
     .toolbar {
-      ToolbarItem(placement: .topBarLeading) {
-        Button {
-          dismiss()
-        } label: {
-          Image(systemName: "chevron.left")
-            .font(.body.weight(.semibold))
-            .foregroundStyle(.primary)
-        }
-      }
-
       ToolbarItem(placement: .principal) {
         Picker("Period", selection: $selectedPeriod) {
           ForEach(SpendingPeriod.allCases, id: \.self) { period in
