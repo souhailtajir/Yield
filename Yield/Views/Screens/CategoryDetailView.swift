@@ -47,16 +47,16 @@ struct CategoryDetailView: View {
 
         // Transactions section
         transactionsSection
-
-        // Bottom summary card
-        summaryCard
       }
       .padding(.horizontal, 20)
       .padding(.top, 20)
-      .padding(.bottom, 40)
+      .padding(.bottom, 120)  // Extra padding for bottom card
     }
     .background(Color(.systemGroupedBackground))
     .navigationBarTitleDisplayMode(.inline)
+    .safeAreaInset(edge: .bottom) {
+      summaryCard
+    }
     .onAppear {
       loadTransactions()
     }
@@ -121,13 +121,9 @@ struct CategoryDetailView: View {
     }
   }
 
-  /// Bottom summary card showing date range and total
+  /// Bottom summary card showing date range and total - fixed to bottom of screen
   private var summaryCard: some View {
     VStack(alignment: .leading, spacing: 8) {
-      Text(dateRangeText)
-        .font(.subheadline)
-        .foregroundStyle(.secondary)
-
       Text(totalAmount.formatted(.currency(code: "USD")))
         .font(.system(size: 32, weight: .bold, design: .rounded))
         .foregroundStyle(.primary)
@@ -135,6 +131,8 @@ struct CategoryDetailView: View {
     .frame(maxWidth: .infinity, alignment: .leading)
     .padding(20)
     .glassEffect(.regular, in: .rect(cornerRadius: 16))
+    .padding(.horizontal, 20)
+    .padding(.bottom, 8)
   }
 
   // MARK: - Data
