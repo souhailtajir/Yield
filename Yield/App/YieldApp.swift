@@ -14,6 +14,7 @@ struct YieldApp: App {
     let schema = Schema([
       Portfolio.self,
       YieldTransaction.self,
+      Subscription.self,
     ])
     let modelConfiguration = ModelConfiguration(
       schema: schema,
@@ -29,7 +30,7 @@ struct YieldApp: App {
 
   var body: some Scene {
     WindowGroup {
-      DashboardView()
+      ContentView()
     }
     .modelContainer(sharedModelContainer)
   }
