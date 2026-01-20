@@ -11,6 +11,7 @@ import SwiftUI
 /// Main dashboard - matches Apple Card proportions and spacing exactly
 struct DashboardView: View {
   @Environment(\.modelContext) private var modelContext
+  @Query(sort: \Subscription.nextBillingDate) private var subscriptions: [Subscription]
   @State private var viewModel = DashboardViewModel()
 
   @State private var categoryData: [CategorySpending] = []
@@ -45,6 +46,12 @@ struct DashboardView: View {
           // Savings Account
           SavingsAccountRow(balance: viewModel.formattedBalance)
 
+          // Upcoming Bills
+          UpcomingBillsCard(
+            subscriptions: subscriptions,
+            totalMonthly: subscriptions.filter { $0.isActive }.reduce(0) { $0 + $1.monthlyCost }
+          )
+
           // Latest Transactions
           if !viewModel.transactions.isEmpty {
             transactionsSection
@@ -68,8 +75,8 @@ struct DashboardView: View {
         }
 
         ToolbarItem(placement: .topBarTrailing) {
-          
-            HStack(spacing: 16) {
+
+          HStack(spacing: 16) {
             Button {
               // Search
             } label: {
