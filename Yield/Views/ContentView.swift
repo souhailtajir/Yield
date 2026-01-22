@@ -13,15 +13,15 @@ struct ContentView: View {
   @State private var selectedTab: Tab = .dashboard
 
   enum Tab: String, CaseIterable {
-    case dashboard = "Dashboard"
-    case subscriptions = "Subscriptions"
-    case calendar = "Calendar"
+    case dashboard = "Home"
+    case expenses = "Expenses"
+    case spendings = "Spendings"
 
     var icon: String {
       switch self {
-      case .dashboard: "creditcard.fill"
-      case .subscriptions: "arrow.clockwise.circle.fill"
-      case .calendar: "calendar"
+      case .dashboard: "dollarsign.bank.building.fill"
+      case .expenses: "creditcard.fill"
+      case .spendings: "banknote.fill"
       }
     }
   }
@@ -43,9 +43,9 @@ struct ContentView: View {
     switch tab {
     case .dashboard:
       DashboardView()
-    case .subscriptions:
+    case .expenses:
       SubscriptionsView()
-    case .calendar:
+    case .spendings:
       SpendingCalendarView()
     }
   }
