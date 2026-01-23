@@ -15,13 +15,11 @@ struct ContentView: View {
   enum Tab: String, CaseIterable {
     case dashboard = "Home"
     case expenses = "Expenses"
-    case spendings = "Spendings"
 
     var icon: String {
       switch self {
       case .dashboard: "dollarsign.bank.building.fill"
       case .expenses: "creditcard.fill"
-      case .spendings: "banknote.fill"
       }
     }
   }
@@ -45,8 +43,6 @@ struct ContentView: View {
       DashboardView()
     case .expenses:
       ExpensesView()
-    case .spendings:
-      SpendingCalendarView()
     }
   }
 }
