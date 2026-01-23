@@ -44,7 +44,7 @@ struct ContentView: View {
     case .dashboard:
       DashboardView()
     case .expenses:
-      SubscriptionsView()
+      ExpensesView()
     case .spendings:
       SpendingCalendarView()
     }
