@@ -5,6 +5,7 @@
 //  Created on 1/23/26.
 //
 
+import Charts
 import SwiftData
 import SwiftUI
 
@@ -16,6 +17,7 @@ struct ExpensesView: View {
 
   @State private var showAddTransaction = false
   @State private var categoryData: [CategorySpending] = []
+  @State private var spendingData: [SpendingDataPoint] = []
 
   /// Total monthly expenses from transactions
   private var totalMonthlyExpenses: Double {
@@ -64,12 +66,19 @@ struct ExpensesView: View {
       .map { $0 }
   }
 
+  /// Current month title
+  private var monthTitle: String {
+    let formatter = DateFormatter()
+    formatter.dateFormat = "MMMM yyyy"
+    return formatter.string(from: Date())
+  }
+
   var body: some View {
     NavigationStack {
       ScrollView {
         VStack(spacing: 16) {
-          // Summary card
-          summaryCard
+          // Spending summary with chart
+          spendingSummaryCard
 
           // Quick stats row
           quickStatsRow
@@ -109,7 +118,7 @@ struct ExpensesView: View {
       }
     }
     .onAppear {
-      loadCategoryData()
+      loadData()
       if subscriptions.isEmpty {
         generateMockSubscriptions()
       }
@@ -118,18 +127,27 @@ struct ExpensesView: View {
 
   // MARK: - Subviews
 
-  /// Summary card showing total monthly spending
-  private var summaryCard: some View {
-    VStack(alignment: .leading, spacing: 12) {
-      Text("Monthly Expenses")
-        .font(.subheadline)
-        .foregroundStyle(.secondary)
+  /// Spending summary card with chart
+  private var spendingSummaryCard: some View {
+    VStack(alignment: .leading, spacing: 16) {
+      // Month title
+      Text(monthTitle)
+        .font(.title2)
+        .fontWeight(.bold)
 
-      Text(totalMonthlySpending.formatted(.currency(code: "USD")))
-        .font(.system(size: 34, weight: .bold, design: .rounded))
-        .foregroundStyle(.primary)
+      // Total spending
+      VStack(alignment: .leading, spacing: 4) {
+        Text("Total Spending")
+          .font(.subheadline)
+          .foregroundStyle(.secondary)
 
-      HStack(spacing: 16) {
+        Text(totalMonthlySpending.formatted(.currency(code: "USD")))
+          .font(.system(size: 34, weight: .bold, design: .rounded))
+          .foregroundStyle(.primary)
+      }
+
+      // Breakdown stats
+      HStack(spacing: 20) {
         VStack(alignment: .leading, spacing: 2) {
           Text("Transactions")
             .font(.caption)
@@ -152,6 +170,12 @@ struct ExpensesView: View {
         }
 
         Spacer()
+      }
+
+      // Spending chart
+      if !spendingData.isEmpty {
+        SpendingChartView(dataPoints: spendingData)
+          .padding(.top, 8)
       }
     }
     .frame(maxWidth: .infinity, alignment: .leading)
@@ -316,8 +340,9 @@ struct ExpensesView: View {
 
   // MARK: - Data
 
-  private func loadCategoryData() {
+  private func loadData() {
     categoryData = CategorySpending.generateMockData()
+    spendingData = SpendingDataPoint.generateMockData()
   }
 
   private func generateMockSubscriptions() {
