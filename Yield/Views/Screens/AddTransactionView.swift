@@ -2,7 +2,7 @@
 //  AddTransactionView.swift
 //  Yield
 //
-//  Created on 1/9/26.
+//  Created on 1/9/26
 //
 
 import SwiftData
