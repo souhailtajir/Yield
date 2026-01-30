@@ -116,7 +116,7 @@ extension CategorySpending {
     [
       CategorySpending(
         category: .shopping,
-        amount: 500.00,
+        amount: 1432.00,
         transactionCount: 5,
         changeAmount: 50.00
       ),
