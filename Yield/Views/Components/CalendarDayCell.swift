@@ -7,7 +7,6 @@
 
 import SwiftUI
 
-/// Individual calendar day cell component
 struct CalendarDayCell: View {
   let day: Int
   let isCurrentMonth: Bool
