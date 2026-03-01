@@ -152,7 +152,7 @@ struct DashboardView: View {
           }
         }
       }
-      .glassEffect(.regular, in: .rect(cornerRadius: 12))
+      .glassEffect(.cleae, in: .rect(cornerRadius: 12))
     }
   }
 
