@@ -180,7 +180,7 @@ struct ExpensesView: View {
     }
     .frame(maxWidth: .infinity, alignment: .leading)
     .padding(20)
-    .glassEffect(.clear, in: .rect(cornerRadius: 16))
+    .glassEffect(.regular, in: .rect(cornerRadius: 16))
   }
 
   /// Quick stats row
