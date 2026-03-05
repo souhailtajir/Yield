@@ -147,7 +147,7 @@ struct AddSubscriptionView: View {
         }
       }
       .pickerStyle(.segmented)
-      .glassEffect(.clear)
+      .glassEffect(.clear.interteractive)
     }
   }
 
