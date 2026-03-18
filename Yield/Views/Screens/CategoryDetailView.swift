@@ -130,7 +130,7 @@ struct CategoryDetailView: View {
     }
     .frame(maxWidth: .infinity, alignment: .leading)
     .padding(20)
-    .glassEffect(.regular, in: .rect(cornerRadius: 16))
+    .glassEffect(.clear, in: .rect(cornerRadius: 16))
     .padding(.horizontal, 20)
     .padding(.bottom, 8)
   }
