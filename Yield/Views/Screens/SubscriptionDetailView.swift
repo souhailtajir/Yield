@@ -335,7 +335,7 @@ struct EditSubscriptionView: View {
               }
             }
             .pickerStyle(.segmented)
-            .glassEffect()
+            .glassEffect(.clear)
           }
 
           // Next billing date
