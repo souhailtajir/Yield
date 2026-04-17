@@ -250,7 +250,7 @@ struct ExpensesView: View {
           }
         }
       }
-      .glassEffect(.regular, in: .rect(cornerRadius: 12))
+      .glassEffect(.clear, in: .rect(cornerRadius: 12))
     }
   }
 
@@ -334,7 +334,7 @@ struct ExpensesView: View {
           }
         }
       }
-      .glassEffect(.regular, in: .rect(cornerRadius: 12))
+      .glassEffect(.clear, in: .rect(cornerRadius: 12))
     }
   }
 
