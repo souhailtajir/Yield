@@ -78,7 +78,7 @@ struct SpendingDetailView: View {
           }
         }
         .pickerStyle(.segmented)
-        .glassEffect()
+        .glassEffect(.clear)
         .frame(minWidth: 220)
       }
     }
