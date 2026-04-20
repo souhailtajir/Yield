@@ -78,7 +78,7 @@ struct SpendingDetailView: View {
           }
         }
         .pickerStyle(.segmented)
-        .glassEffect()
+        .glassEffect(.clear)
         .frame(minWidth: 220)
       }
     }
@@ -101,7 +101,7 @@ struct SpendingDetailView: View {
       }
     }
     .pickerStyle(.segmented)
-    .glassEffect(.regular)
+    .glassEffect(.clear)
   }
 
   /// Spending summary with chart
