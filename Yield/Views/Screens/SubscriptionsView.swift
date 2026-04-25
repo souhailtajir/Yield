@@ -121,7 +121,7 @@ struct SubscriptionsView: View {
     }
     .frame(maxWidth: .infinity, alignment: .leading)
     .padding(20)
-    .glassEffect(.clear, in: .rect(cornerRadius: 16))
+    .glassEffect(.regular, in: .rect(cornerRadius: 16))
   }
 
   /// Empty state view
@@ -195,7 +195,7 @@ struct SubscriptionsView: View {
           }
         }
       }
-      .glassEffect(.clear, in: .rect(cornerRadius: 12))
+      .glassEffect(.regular, in: .rect(cornerRadius: 12))
     }
   }
 
