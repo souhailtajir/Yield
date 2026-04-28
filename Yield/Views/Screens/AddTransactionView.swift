@@ -143,7 +143,7 @@ struct AddTransactionView: View {
         }
       }
       .pickerStyle(.segmented)
-      .glassEffect()
+      .glassEffect(.clear)
     }
   }
 
