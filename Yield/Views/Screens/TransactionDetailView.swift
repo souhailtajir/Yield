@@ -94,7 +94,7 @@ struct TransactionDetailView: View {
       // Category row with picker
       categoryRow
     }
-    .glassEffect(.clear, in: .rect(cornerRadius: 12))
+    .glassEffect(.regular, in: .rect(cornerRadius: 12))
   }
 
   private func detailRow<Content: View>(
