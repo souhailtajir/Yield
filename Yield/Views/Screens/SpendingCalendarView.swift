@@ -148,7 +148,7 @@ struct SpendingCalendarView: View {
     }
     .frame(maxWidth: .infinity, alignment: .leading)
     .padding(16)
-    .glassEffect(.regular, in: .rect(cornerRadius: 12))
+    .glassEffect(.clear, in: .rect(cornerRadius: 12))
   }
 
   /// Calendar grid
@@ -194,7 +194,7 @@ struct SpendingCalendarView: View {
       }
       .padding(12)
     }
-    .glassEffect(.regular, in: .rect(cornerRadius: 16))
+    .glassEffect(.clear, in: .rect(cornerRadius: 16))
   }
 
   /// Selected day transactions section
@@ -229,7 +229,7 @@ struct SpendingCalendarView: View {
           .foregroundStyle(.secondary)
           .frame(maxWidth: .infinity, alignment: .center)
           .padding(.vertical, 20)
-          .glassEffect(.regular, in: .rect(cornerRadius: 12))
+          .glassEffect(.clear, in: .rect(cornerRadius: 12))
       } else {
         VStack(spacing: 0) {
           // Subscription payments
@@ -252,7 +252,7 @@ struct SpendingCalendarView: View {
             }
           }
         }
-        .glassEffect(.regular, in: .rect(cornerRadius: 12))
+        .glassEffect(.clear, in: .rect(cornerRadius: 12))
       }
     }
   }
