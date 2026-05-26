@@ -130,7 +130,7 @@ struct DayExpenseDetailView: View {
     }
     .frame(maxWidth: .infinity, alignment: .leading)
     .padding(16)
-    .glassEffect(.clear, in: .rect(cornerRadius: 12))
+    .glassEffect(.regular, in: .rect(cornerRadius: 12))
   }
 
   /// Summary statistics
@@ -185,7 +185,7 @@ struct DayExpenseDetailView: View {
       .padding(.leading, 16)
     }
     .padding(16)
-    .glassEffect(.clear, in: .rect(cornerRadius: 12))
+    .glassEffect(.regular, in: .rect(cornerRadius: 12))
   }
 
   /// Subscription payments section
@@ -215,7 +215,7 @@ struct DayExpenseDetailView: View {
           }
         }
       }
-      .glassEffect(.clear, in: .rect(cornerRadius: 12))
+      .glassEffect(.regular, in: .rect(cornerRadius: 12))
     }
   }
 
@@ -251,7 +251,7 @@ struct DayExpenseDetailView: View {
           }
         }
       }
-      .glassEffect(.clear, in: .rect(cornerRadius: 12))
+      .glassEffect(.regular, in: .rect(cornerRadius: 12))
     }
   }
 
