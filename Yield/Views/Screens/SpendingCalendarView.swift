@@ -148,7 +148,7 @@ struct SpendingCalendarView: View {
     }
     .frame(maxWidth: .infinity, alignment: .leading)
     .padding(16)
-    .glassEffect(.regular, in: .rect(cornerRadius: 12))
+    .glassEffect(.clear, in: .rect(cornerRadius: 12))
   }
 
   /// Calendar grid
