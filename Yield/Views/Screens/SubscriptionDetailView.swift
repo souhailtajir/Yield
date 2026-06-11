@@ -132,7 +132,7 @@ struct SubscriptionDetailView: View {
         DetailRow(title: "Notes", value: notes)
       }
     }
-    .glassEffect(.regular, in: .rect(cornerRadius: 12))
+    .glassEffect(.clear, in: .rect(cornerRadius: 12))
   }
 
   /// Payment history section (mock data)
@@ -171,7 +171,7 @@ struct SubscriptionDetailView: View {
           }
         }
       }
-      .glassEffect(.regular, in: .rect(cornerRadius: 12))
+      .glassEffect(.clear, in: .rect(cornerRadius: 12))
     }
   }
 
@@ -191,7 +191,7 @@ struct SubscriptionDetailView: View {
         }
         .foregroundStyle(subscription.isActive ? .orange : .green)
         .padding(16)
-        .glassEffect(.regular, in: .rect(cornerRadius: 12))
+        .glassEffect(.clear, in: .rect(cornerRadius: 12))
       }
       .buttonStyle(.plain)
 
@@ -208,7 +208,7 @@ struct SubscriptionDetailView: View {
         }
         .foregroundStyle(.red)
         .padding(16)
-        .glassEffect(.regular, in: .rect(cornerRadius: 12))
+        .glassEffect(.clear, in: .rect(cornerRadius: 12))
       }
       .buttonStyle(.plain)
     }
