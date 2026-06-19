@@ -130,7 +130,7 @@ struct DayExpenseDetailView: View {
     }
     .frame(maxWidth: .infinity, alignment: .leading)
     .padding(16)
-    .glassEffect(.regular, in: .rect(cornerRadius: 12))
+    .glassEffect(.clear, in: .rect(cornerRadius: 12))
   }
 
   /// Summary statistics
