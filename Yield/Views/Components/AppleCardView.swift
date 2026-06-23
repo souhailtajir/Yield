@@ -89,7 +89,7 @@ struct RemainingBalanceCard: View {
     .background {
       RoundedRectangle(cornerRadius: 12)
         .fill(.clear)
-        .glassEffect(.regular)
+        .glassEffect(.clear)
     }
   }
 }
@@ -133,7 +133,7 @@ struct WeeklyActivityCard: View {
     .background {
       RoundedRectangle(cornerRadius: 12)
         .fill(.clear)
-        .glassEffect(.regular)
+        .glassEffect(.clear)
     }
   }
 }
@@ -180,7 +180,7 @@ struct SavingsAccountRow: View {
     .background {
       RoundedRectangle(cornerRadius: 12)
         .fill(.clear)
-        .glassEffect(.regular)
+        .glassEffect(.clear)
     }
   }
 }
