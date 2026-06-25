@@ -80,7 +80,7 @@ struct UpcomingBillsCard: View {
     .background {
       RoundedRectangle(cornerRadius: 12)
         .fill(.clear)
-        .glassEffect(.clear)
+        .glassEffect()
     }
   }
 }
