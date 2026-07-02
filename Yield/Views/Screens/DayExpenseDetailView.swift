@@ -8,7 +8,7 @@
 import SwiftData
 import SwiftUI
 
-/// Detailed view of expenses for a specific day
+// Detailed view of expenses for a specific day
 struct DayExpenseDetailView: View {
   @Environment(\.dismiss) private var dismiss
   @Environment(\.modelContext) private var modelContext
